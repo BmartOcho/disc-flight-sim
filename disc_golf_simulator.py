@@ -17,6 +17,10 @@ default_roll = 14.7
 
 def main():
     tab1, tab2 = st.tabs(['Simulator', 'FAQ'])
+    vb_link = 'https://visitor-badge.glitch.me/badge?page_id=derek-thomas.disc-golf-simulator&left_color=gray&right_color=blue'
+    st.sidebar.markdown(f"""
+    ![Total Visitors]({vb_link})
+    """)
     with tab1:
         disc_names = {
             'Innova Wraith': 'dd2',
@@ -45,55 +49,48 @@ def main():
                                       value=default_pitch,
                                       step=0.1)
 
-        pos = np.array((0, 0, z0))
-        disc_dict = DiscGolfDisc(disc_name)
+        with st.spinner(text="Calculating Flight Path..."):
+            pos = np.array((0, 0, z0))
+            disc_dict = DiscGolfDisc(disc_name)
 
-        stl_mesh = get_stl(proj_dir / 'shotshaper' / 'discs' / (disc_name + '.stl'))
-        fig = visualize_disc(stl_mesh, nose=nose, roll=roll)
+            stl_mesh = get_stl(proj_dir / 'shotshaper' / 'discs' / (disc_name + '.stl'))
+            fig = visualize_disc(stl_mesh, nose=nose, roll=roll)
 
-        st.markdown("""## Disc Orientation""")
-        st.plotly_chart(fig)
-        st.markdown("""## Flight Path""")
-        shot = disc_dict.shoot(speed=U, omega=omega, pitch=pitch,
-                               position=pos, nose_angle=nose, roll_angle=roll)
+            st.markdown("""## Disc Orientation""")
+            st.plotly_chart(fig)
+            st.markdown("""## Flight Path""")
+            shot = disc_dict.shoot(speed=U, omega=omega, pitch=pitch,
+                                   position=pos, nose_angle=nose, roll_angle=roll)
 
-        # Plot trajectory
-        x, y, z = shot.position
-        x_new, y_new = -1 * y, x
+            # Plot trajectory
+            x, y, z = shot.position
+            x_new, y_new = -1 * y, x
 
-        # Reversed x and y to mimic a throw
-        fig = get_plot(x_new, y_new, z)
-        st.plotly_chart(fig, True)
+            # Reversed x and y to mimic a throw
+            fig = get_plot(x_new, y_new, z)
+            st.plotly_chart(fig, True)
 
-        st.markdown(
-                f"""
-        **Arrows in Blue** show you where your *s-turn* is.
+            st.markdown(
+                    f"""
+            **Arrows in Blue** show you where your *s-turn* is.
 
-        **Arrows in Red** show you your *max height* and *lateral deviance*.
+            **Arrows in Red** show you your *max height* and *lateral deviance*.
 
-        Hit Play to watch your animated throw.
+            Hit Play to watch your animated throw.
 
-        | Metric       | Value  |
-        |--------------|--------|
-        | Drift Left   | {round(min(x_new), 2)} |
-        | Drift Right  | {round(max(x_new), 2)} |
-        | Max Height   | {round(max(z), 2)}    |
-        | Distance     | {round(max(y_new), 2)} |
+            | Metric       | Value  |
+            |--------------|--------|
+            | Drift Left   | {round(min(x_new), 2)} |
+            | Drift Right  | {round(max(x_new), 2)} |
+            | Max Height   | {round(max(z), 2)}    |
+            | Distance     | {round(max(y_new), 2)} |
 
-        """
-                )
+            """
+                    )
 
-        arc, alphas, betas, lifts, drags, moms, rolls = disc_dict.post_process(shot, omega)
-        fig = get_subplots(arc, alphas, lifts, drags, moms, rolls, shot.velocity)
-        st.plotly_chart(fig, True)
-
-        vb_link = 'https://visitor-badge.glitch.me/badge?page_id=derek-thomas.disc-golf-simulator&left_color=gray&right_color=blue'
-        visitor_badge = f"![Total Visitors]({vb_link})"
-        st.markdown(f"""
-        Thanks for visiting :)
-        
-        ![Total Visitors]({vb_link})
-        """)
+            arc, alphas, betas, lifts, drags, moms, rolls = disc_dict.post_process(shot, omega)
+            fig = get_subplots(arc, alphas, lifts, drags, moms, rolls, shot.velocity)
+            st.plotly_chart(fig, True)
 
     with tab2:
         st.markdown("""
