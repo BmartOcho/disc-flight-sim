@@ -5,7 +5,7 @@ colorFrom: purple
 colorTo: gray
 sdk: streamlit
 sdk_version: 1.17.0
-app_file: Disc Golf Simulator.py
+app_file: 'Disc Golf Simulator.py'
 pinned: false
 license: gpl-3.0
 ---
