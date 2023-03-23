@@ -4,7 +4,7 @@ from logging import getLogger
 from pathlib import Path
 
 from shotshaper.projectile import DiscGolfDisc
-from utilities.visualize import get_plot, get_stl, get_subplots, visualize_disc
+from utilities.visualize import get_plot, get_subplots, visualize_disc, stl_meshes
 
 # Define the default values
 default_U = 24.2
@@ -49,15 +49,16 @@ def main():
                                       value=default_pitch,
                                       step=0.1)
 
-        with st.spinner(text="Calculating Flight Path..."):
+        with st.spinner(text="Calculating Disc Orientation..."):
             pos = np.array((0, 0, z0))
             disc_dict = DiscGolfDisc(disc_name)
 
-            stl_mesh = get_stl(proj_dir / 'shotshaper' / 'discs' / (disc_name + '.stl'))
+            stl_mesh = stl_meshes[disc_name]
             fig = visualize_disc(stl_mesh, nose=nose, roll=roll)
 
             st.markdown("""## Disc Orientation""")
             st.plotly_chart(fig)
+        with st.spinner(text="Calculating Flight Path..."):
             st.markdown("""## Flight Path""")
             shot = disc_dict.shoot(speed=U, omega=omega, pitch=pitch,
                                    position=pos, nose_angle=nose, roll_angle=roll)

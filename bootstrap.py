@@ -3,7 +3,7 @@ import streamlit.web.bootstrap
 from streamlit import config as _config
 
 proj_dir = Path(__file__).parent
-filename = proj_dir / "Disc Golf Simulator.py"
+filename = proj_dir / "disc_golf_simulator.py"
 
 _config.set_option("server.headless", True)
 args = []

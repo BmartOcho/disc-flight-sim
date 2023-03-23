@@ -1,26 +1,23 @@
 import math
-
 import numpy as np
 import plotly.graph_objects as go
+from pathlib import Path
 from plotly.colors import sequential
 from stl.mesh import Mesh
 
 from .extrema import find_extrema
 
+proj_dir = Path(__file__).parents[1]
 
-def get_stl(stl_file):
-    """
-    Taken from https://community.plotly.com/t/view-3d-cad-data/16920/9
-    """
-    stl_mesh = Mesh.from_file(stl_file)
-    return stl_mesh
+# Taken from https://community.plotly.com/t/view-3d-cad-data/16920/9
+stl_meshes = {disc.stem: Mesh.from_file(disc) for disc in (proj_dir / 'shotshaper' / 'discs').glob('*.stl')}
 
 
 def visualize_disc(stl_mesh, nose, roll):
     """
     Taken from https://community.plotly.com/t/view-3d-cad-data/16920/9
     """
-    stl_mesh.rotate([1, 0, 0], math.radians(-1*nose))
+    stl_mesh.rotate([1, 0, 0], math.radians(-1 * nose))
     stl_mesh.rotate([0, 1, 0], math.radians(roll))
     # stl_mesh.rotate([0, 0, 1], math.radians(z_angle))
 
