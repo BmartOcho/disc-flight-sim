@@ -28,26 +28,30 @@ def main():
         disc_name = disc_names[disc_selected]
 
         # Create the sliders with the default values
-        U = st.sidebar.slider("Throwing Velocity (m/s)", min_value=0.0, max_value=40.0, value=default_U, step=0.1,
-                              help='Fastest Throw on record is ~40m/s by Simon Lizotte')
-        omega = st.sidebar.slider("Omega", min_value=0.0, max_value=200.0, value=default_omega, step=0.1)
-        z0 = st.sidebar.slider("Release Height (m)", min_value=0.0, max_value=2.0, value=default_z0, step=0.1)
-        pitch = st.sidebar.slider("Pitch Angle (deg) | Release angle", min_value=0.0, max_value=90.0,
-                                  value=default_pitch,
-                                  step=0.1)
-        nose = st.sidebar.slider("Nose Angle (deg) | Up/Down", min_value=0.0, max_value=90.0, value=default_nose,
-                                 step=0.1)
-        roll = st.sidebar.slider("Roll Angle (deg) | Tilt Left/Right", min_value=-90.0, max_value=90.0,
-                                 value=default_roll,
-                                 step=0.1)
+        with st.container():
+            st.sidebar.markdown("### Disc Orientation")
+            nose = st.sidebar.slider("Nose Angle (deg) | Up/Down", min_value=0.0, max_value=90.0, value=default_nose,
+                                     step=0.1)
+            roll = st.sidebar.slider("Roll Angle (deg) | Tilt Left/Right", min_value=-90.0, max_value=90.0,
+                                     value=default_roll,
+                                     step=0.1)
+        with st.sidebar.container():
+            st.sidebar.markdown("### Throwing Properties")
+            U = st.sidebar.slider("Throwing Velocity (m/s)", min_value=0.0, max_value=40.0, value=default_U, step=0.1,
+                                  help='Fastest Throw on record is ~40m/s by Simon Lizotte')
+            omega = st.sidebar.slider("Omega", min_value=0.0, max_value=200.0, value=default_omega, step=0.1)
+            z0 = st.sidebar.slider("Release Height (m)", min_value=0.0, max_value=2.0, value=default_z0, step=0.1)
+            pitch = st.sidebar.slider("Pitch Angle (deg) | Release angle", min_value=0.0, max_value=90.0,
+                                      value=default_pitch,
+                                      step=0.1)
 
-        pos = np.array((0, 0, default_z0))
+        pos = np.array((0, 0, z0))
         disc_dict = DiscGolfDisc(disc_name)
 
         stl_mesh = get_stl(proj_dir / 'shotshaper' / 'discs' / (disc_name + '.stl'))
         fig = visualize_disc(stl_mesh, nose=nose, roll=roll)
 
-        st.markdown("""## Disc orientation""")
+        st.markdown("""## Disc Orientation""")
         st.plotly_chart(fig)
         st.markdown("""## Flight Path""")
         shot = disc_dict.shoot(speed=U, omega=omega, pitch=pitch,
