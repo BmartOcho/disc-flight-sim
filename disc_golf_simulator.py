@@ -88,7 +88,7 @@ def main():
         st.markdown(f"""
         Thanks for visiting :)
         
-        
+        ![Total Visitors]({vb_link})
         """)
 
     with tab2:

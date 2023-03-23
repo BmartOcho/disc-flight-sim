@@ -268,5 +268,5 @@ def get_subplots(arc, alphas, lifts, drags, moms, rolls, velocity):
     fig.update_xaxes(title_text="Distance (m)", row=2, col=3)
     fig.update_yaxes(title_text="Roll rate (rad/s)", row=2, col=3)
 
-    fig.update_layout(height=600, width=1000, title_text="Plotly Subplots", hovermode='x')
+    fig.update_layout(height=600, width=1000, title_text="Analysis Subplots", hovermode='x')
     return fig
