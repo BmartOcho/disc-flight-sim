@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from plotly.colors import sequential
 from stl.mesh import Mesh
 
-from extrema import find_extrema
+from .extrema import find_extrema
 
 
 def get_stl(stl_file):

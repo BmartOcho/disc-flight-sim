@@ -1,15 +1,10 @@
-from logging import getLogger
-from pathlib import Path
-proj_dir = Path(__file__).parents[1]
-import sys
-sys.path.append(str(proj_dir))
-
 import numpy as np
 import streamlit as st
+from logging import getLogger
+from pathlib import Path
 
 from shotshaper.projectile import DiscGolfDisc
-from visualize import get_plot, get_stl, get_subplots, visualize_disc
-
+from utilities.visualize import get_plot, get_stl, get_subplots, visualize_disc
 
 # Define the default values
 default_U = 24.2
@@ -37,11 +32,13 @@ def main():
                               help='Fastest Throw on record is ~40m/s by Simon Lizotte')
         omega = st.sidebar.slider("Omega", min_value=0.0, max_value=200.0, value=default_omega, step=0.1)
         z0 = st.sidebar.slider("Release Height (m)", min_value=0.0, max_value=2.0, value=default_z0, step=0.1)
-        pitch = st.sidebar.slider("Pitch Angle (deg) | Release angle", min_value=0.0, max_value=90.0, value=default_pitch,
+        pitch = st.sidebar.slider("Pitch Angle (deg) | Release angle", min_value=0.0, max_value=90.0,
+                                  value=default_pitch,
                                   step=0.1)
         nose = st.sidebar.slider("Nose Angle (deg) | Up/Down", min_value=0.0, max_value=90.0, value=default_nose,
                                  step=0.1)
-        roll = st.sidebar.slider("Roll Angle (deg) | Tilt Left/Right", min_value=-90.0, max_value=90.0, value=default_roll,
+        roll = st.sidebar.slider("Roll Angle (deg) | Tilt Left/Right", min_value=-90.0, max_value=90.0,
+                                 value=default_roll,
                                  step=0.1)
 
         pos = np.array((0, 0, default_z0))
@@ -86,6 +83,14 @@ def main():
         fig = get_subplots(arc, alphas, lifts, drags, moms, rolls, shot.velocity)
         st.plotly_chart(fig, True)
 
+        vb_link = 'https://visitor-badge.glitch.me/badge?page_id=derek-thomas.disc-golf-simulator&left_color=gray&right_color=blue'
+        visitor_badge = f"![Total Visitors]({vb_link})"
+        st.markdown(f"""
+        Thanks for visiting :)
+        
+        
+        """)
+
     with tab2:
         st.markdown("""
         # Motivation
@@ -109,7 +114,7 @@ def main():
 if __name__ == "__main__":
     # Setting up Logger and proj_dir
     logger = getLogger(__name__)
-    proj_dir = Path(__file__).parents[1]
+    proj_dir = Path(__file__).parent
 
     st.title("Disc Golf Simulator")
 
