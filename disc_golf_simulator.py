@@ -1,10 +1,10 @@
-import numpy as np
-import streamlit as st
 from logging import getLogger
 from pathlib import Path
 
+import numpy as np
+import streamlit as st
 from shotshaper.projectile import DiscGolfDisc
-from utilities.visualize import get_plot, get_subplots, visualize_disc, stl_meshes
+from utilities.visualize import get_plot, get_subplots, stl_meshes, visualize_disc
 
 # Define the default values
 default_U = 24.2
@@ -13,6 +13,24 @@ default_z0 = 1.3
 default_pitch = 15.5
 default_nose = 0.0
 default_roll = 14.7
+
+faq = """
+# Motivation
+I saw some great work by [kegiljarhus](https://github.com/kegiljarhus) [repo](https://github.com/kegiljarhus/shotshaper)
+and wanted to make this available as an app so people could learn more about disc golf. I really want to commend
+the amazing idea of writing a [scientific article](https://link.springer.com/article/10.1007/s12283-022-00390-5)
+ AND releasing code, and actually executing it well. This is what gets people excited about STEM.
+
+I originally saw this 
+[reddit post](https://www.reddit.com/r/discgolf/comments/yyhbcj/wrote_a_scientific_article_on_disc_golf_flight/)
+which really piqued my interest.
+
+# Questions
+- I imagine some of you will want to add your disc here, if you can convert your disc into an `.stl` then I will 
+add it to the database. If this gets common enough I will add an option to upload your own.
+    - I imagine there will be a barrier to entry to do this.
+    - If you have any ideas, just let me know in a discussion or in a pull request
+"""
 
 
 def main():
@@ -94,23 +112,7 @@ def main():
             st.plotly_chart(fig, True)
 
     with tab2:
-        st.markdown("""
-        # Motivation
-        I saw some great work by [kegiljarhus](https://github.com/kegiljarhus) [repo](https://github.com/kegiljarhus/shotshaper)
-        and wanted to make this available as an app so people could learn more about disc golf. I really want to commend
-        the amazing idea of writing a [scientific article](https://link.springer.com/article/10.1007/s12283-022-00390-5)
-         AND releasing code, and actually executing it well. This is what gets people excited about STEM.
-        
-        I originally saw this 
-        [reddit post](https://www.reddit.com/r/discgolf/comments/yyhbcj/wrote_a_scientific_article_on_disc_golf_flight/)
-        which really piqued my interest.
-        
-        # Questions
-        - I imagine some of you will want to add your disc here, if you can convert your disc into an `.stl` then I will 
-        add it to the database. If this gets common enough I will add an option to upload your own.
-            - I imagine there will be a barrier to entry to do this.
-            - If you have any ideas, just let me know in a discussion or in a pull request
-        """)
+        st.markdown(faq)
 
 
 if __name__ == "__main__":
