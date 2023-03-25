@@ -95,7 +95,7 @@ def get_plot(x, y, z):
             )
 
     # Create figure with subplots
-    fig = sp.make_subplots(rows=2, cols=2, subplot_titles=("Flight Path", "Height", "Lateral Deviance"),
+    fig = sp.make_subplots(rows=2, cols=2, subplot_titles=("Flight Path", "Height (over time)", "Lateral Deviance (left and right motion)"),
                            specs=[[{"rowspan": 2}, {}], [None, {}]], row_heights=[0.5, 0.5])
 
     # Add traces to the main plot

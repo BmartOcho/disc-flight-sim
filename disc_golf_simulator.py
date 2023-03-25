@@ -1,8 +1,10 @@
+from copy import deepcopy
 from logging import getLogger
 from pathlib import Path
 
 import numpy as np
 import streamlit as st
+
 from shotshaper.projectile import DiscGolfDisc
 from utilities.visualize import get_plot, get_subplots, stl_meshes, visualize_disc
 
@@ -52,18 +54,27 @@ def main():
         # Create the sliders with the default values
         with st.container():
             st.sidebar.markdown("### Disc Orientation")
-            nose = st.sidebar.slider("Nose Angle (deg) | Up/Down", min_value=0.0, max_value=90.0, value=default_nose,
+            nose = st.sidebar.slider("Nose Angle (deg) | Up/Down", min_value=-45.0, max_value=90.0, value=default_nose,
+                                     help='0 is the disc pointing to the horizon\n90 is the disc pointing to the sky.',
                                      step=0.1)
-            roll = st.sidebar.slider("Roll Angle (deg) | Tilt Left/Right", min_value=-90.0, max_value=90.0,
+            roll = st.sidebar.slider("Roll Angle (deg) | Anhyzer/Hyzer", min_value=-90.0, max_value=90.0,
+                                     help='-90 the disc is very anhyzer, '
+                                          '0 is the disc flat on the table, '
+                                          '90 the disc is very hyzer',
                                      value=default_roll,
                                      step=0.1)
         with st.sidebar.container():
             st.sidebar.markdown("### Throwing Properties")
             U = st.sidebar.slider("Throwing Velocity (m/s)", min_value=0.0, max_value=40.0, value=default_U, step=0.1,
-                                  help='Fastest Throw on record is ~40m/s by Simon Lizotte')
-            omega = st.sidebar.slider("Omega", min_value=0.0, max_value=200.0, value=default_omega, step=0.1)
-            z0 = st.sidebar.slider("Release Height (m)", min_value=0.0, max_value=2.0, value=default_z0, step=0.1)
+                                  help='20m/s is a begginer\'s throw. '
+                                       'The fastest throw on record is ~40m/s by Simon Lizotte')
+            omega = st.sidebar.slider("Omega (revolutions/s)", min_value=0.0, max_value=200.0, value=default_omega,
+                                      step=0.1,
+                                      help='How much spin do you have?')
+            z0 = st.sidebar.slider("Release Height (m)", min_value=0.0, max_value=2.0, value=default_z0, step=0.1,
+                                   help='How high is your arm when throwing?')
             pitch = st.sidebar.slider("Pitch Angle (deg) | Release angle", min_value=0.0, max_value=90.0,
+                                      help='0 = flat, 90 = aiming straight up',
                                       value=default_pitch,
                                       step=0.1)
 
@@ -71,13 +82,18 @@ def main():
             pos = np.array((0, 0, z0))
             disc_dict = DiscGolfDisc(disc_name)
 
-            stl_mesh = stl_meshes[disc_name]
+            stl_mesh = deepcopy(stl_meshes[disc_name])
             fig = visualize_disc(stl_mesh, nose=nose, roll=roll)
 
-            st.markdown("""## Disc Orientation""")
+            st.markdown("""
+            ## Disc Orientation
+            This is what your disc should look like after you release. The `Nose Angle` and `Roll Angle` 
+            sidebar sliders control this.""")
             st.plotly_chart(fig)
         with st.spinner(text="Calculating Flight Path..."):
-            st.markdown("""## Flight Path""")
+            st.markdown("""
+            ## Flight Path
+            Based on the sliders to the left, this will determine what your throw will look like.""")
             shot = disc_dict.shoot(speed=U, omega=omega, pitch=pitch,
                                    position=pos, nose_angle=nose, roll_angle=roll)
 
@@ -88,14 +104,13 @@ def main():
             # Reversed x and y to mimic a throw
             fig = get_plot(x_new, y_new, z)
             st.plotly_chart(fig, True)
-
             st.markdown(
                     f"""
             **Arrows in Blue** show you where your *s-turn* is.
 
             **Arrows in Red** show you your *max height* and *lateral deviance*.
 
-            Hit Play to watch your animated throw.
+            Hit `Play` to watch your animated throw.
 
             | Metric       | Value  |
             |--------------|--------|
@@ -109,7 +124,8 @@ def main():
 
             arc, alphas, betas, lifts, drags, moms, rolls = disc_dict.post_process(shot, omega)
             fig = get_subplots(arc, alphas, lifts, drags, moms, rolls, shot.velocity)
-            st.plotly_chart(fig, True)
+            with st.expander("Optional Charts for science-y people"):
+                st.plotly_chart(fig, True)
 
     with tab2:
         st.markdown(faq)
