@@ -44,9 +44,9 @@ def visualize_disc(stl_mesh, nose, roll):
 
     fig.update_layout(
             scene=dict(
-                    xaxis=dict(nticks=4, range=[-0.11, 0.11], ),
-                    yaxis=dict(nticks=4, range=[-0.11, 0.11], ),
-                    zaxis=dict(nticks=4, range=[-0.11, 0.11], ), )
+                    xaxis=dict(nticks=4, range=[-0.11, 0.11], fixedrange=True),
+                    yaxis=dict(nticks=4, range=[-0.11, 0.11], fixedrange=True),
+                    zaxis=dict(nticks=4, range=[-0.11, 0.11], fixedrange=True), )
             )
     return fig
 
