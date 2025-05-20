@@ -122,10 +122,10 @@ def main():
             """
                     )
 
-            arc, alphas, betas, lifts, drags, moms, rolls = disc_dict.post_process(shot, omega)
-            fig = get_subplots(arc, alphas, lifts, drags, moms, rolls, shot.velocity)
-            with st.expander("Optional Charts for science-y people"):
-                st.plotly_chart(fig, True)
+           # arc, alphas, betas, lifts, drags, moms, rolls = disc_dict.post_process(shot, omega)
+           # fig = get_subplots(arc, alphas, lifts, drags, moms, rolls, shot.velocity)
+           # with st.expander("Optional Charts for science-y people"):
+           #     st.plotly_chart(fig, True)
 
     with tab2:
         st.markdown(faq)
